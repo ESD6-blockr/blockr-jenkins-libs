@@ -18,6 +18,6 @@ def call() {
             sh 'npm run build'
         }
 
-        cleanWorkspace()
+        cleanWorkSpace()
     }
 }
