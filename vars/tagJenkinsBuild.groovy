@@ -18,6 +18,9 @@ def call(String type) {
                 def packageFile = readJSON file: 'package.json'
                 currentBuild.displayName = "${packageFile.version}-${branch}-${env.BUILD_NUMBER}"
                 env.PROJECT_VERSION = packageFile.version
+                String newVersion = "${env.PROJECT_VERSION}-${env.BUILD_NUMBER}"
+                packageFile.version = newVersion
+                writeJSON file: 'package.json', json: packageFile
                 break
         }
     }
