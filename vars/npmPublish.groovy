@@ -23,6 +23,5 @@ def call() {
                 return;
             }
         }
-        echo 'This package was not published'
     }
 }

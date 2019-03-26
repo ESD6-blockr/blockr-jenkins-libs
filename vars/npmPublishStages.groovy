@@ -21,12 +21,12 @@ def call(String environment = null) {
     }
 
     stage('Set publish registry') {
-        withCredentials([usernamePassword(credentialsId: "npmjs", passwordVariable: 'token')]) {
+        withCredentials([usernamePassword(credentialsId: "npmjs", passwordVariable: 'token', usernameVariable: 'user')]) {
             sh "echo '//registry.npmjs.org/:_authToken=${token}' >> .npmrc"
         }
     }
 
     stage('Publish to registry') {
-        sh 'npm publish --acccess public'
+        sh 'npm publish --access public'
     }
 }
