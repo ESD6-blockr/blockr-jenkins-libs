@@ -20,14 +20,17 @@ def call(Map sonarSettings) {
     }
 
     stage('Sonarqube scan') {
-        def scannerHome  = tool 'DefaultScanner'
-        withSonarQubeEnv('main') {
-            sh "${scannerHome}/bin/sonar-scanner \
-            -Dsonar.projectKey=${sonarSettings.key} \
-            -Dsonar.sources=${sonarSettings.source} \
-            -Dsonar.host.url=${sonarSettings.host} \
-            -Dsonar.login=${sonarSettings.token}"
-        }   
+        withCredentials([usernamePassword(credentialsId: "sonar.${settings.key}", passwordVariable: 'token', usernameVariable: 'user')]) {
+            def scannerHome  = tool 'DefaultScanner'
+            
+            withSonarQubeEnv('main') {
+                sh "${scannerHome}/bin/sonar-scanner \
+                -Dsonar.projectKey=${sonarSettings.key} \
+                -Dsonar.sources=${sonarSettings.source} \
+                -Dsonar.host.url=${sonarSettings.host} \
+                -Dsonar.login=${token}"
+            }
+        }
     }
 
     stage('Build') {
