@@ -1,12 +1,12 @@
 #!/usr/bin/groovy
 
-def call() {
+def call(Map sonarSettings) {
     node('nodejs') {
         scmClone()
 
         tagJenkinsBuild('npm')
 
-        tsBuildStages()
+        tsBuildStages(sonarSettings)
 
         npmPublish()
         
