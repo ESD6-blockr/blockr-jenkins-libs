@@ -1,6 +1,6 @@
 #!/usr/bin/groovy
 
-def call(Map sonarSettings) {
+def call(Map sonarSettings = null) {
     stage('Initialize') {
         def branch = env.BRANCH_NAME
        
@@ -19,16 +19,18 @@ def call(Map sonarSettings) {
         sh 'npm run lint'
     }
 
-    stage('Sonarqube scan') {
-        withCredentials([usernamePassword(credentialsId: "sonar.${settings.key}", passwordVariable: 'token', usernameVariable: 'user')]) {
-            def scannerHome  = tool 'DefaultScanner'
-            
-            withSonarQubeEnv('main') {
-                sh "${scannerHome}/bin/sonar-scanner \
-                -Dsonar.projectKey=${sonarSettings.key} \
-                -Dsonar.sources=${sonarSettings.source} \
-                -Dsonar.host.url=${sonarSettings.host} \
-                -Dsonar.login=${token}"
+    if (sonarSettings != null) {
+        stage('Sonarqube scan') {
+            withCredentials([usernamePassword(credentialsId: "sonar.${sonarSettings.key}", passwordVariable: 'token', usernameVariable: 'user')]) {
+                def scannerHome  = tool 'DefaultScanner'
+                
+                withSonarQubeEnv('main') {
+                    sh "${scannerHome}/bin/sonar-scanner \
+                    -Dsonar.projectKey=${sonarSettings.key} \
+                    -Dsonar.sources=${sonarSettings.source} \
+                    -Dsonar.host.url=${sonarSettings.host} \
+                    -Dsonar.login=${token}"
+                }
             }
         }
     }

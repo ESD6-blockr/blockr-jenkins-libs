@@ -1,6 +1,6 @@
 #!/usr/bin/groovy
 
-def call(Map sonarSettings) {
+def call(Map sonarSettings = null) {
     node('nodejs') {
         scmClone()
 
