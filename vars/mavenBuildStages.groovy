@@ -3,7 +3,7 @@ def call(Map sonarSettings = null) {
         stage('Build with sonarube scan') {
             withCredentials([usernamePassword(credentialsId: "sonar.${sonarSettings.key}", passwordVariable: 'token', usernameVariable: 'user')]) {
                 withSonarQubeEnv('main') {
-                    sh "mvn clean deploy sonar:sonar \
+                    sh "mvn clean package sonar:sonar \
                         -Dsonar.projectKey=${sonarSettings.key} \
                         -Dsonar.host.url=${sonarSettings.host} \
                         -Dsonar.login=${token}"
