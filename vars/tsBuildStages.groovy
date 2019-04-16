@@ -1,6 +1,6 @@
 #!/usr/bin/groovy
 
-def call(String version, Map sonarSettings = null) {
+def call(Map sonarSettings = null) {
     stage('Initialize') {
         def branch = env.BRANCH_NAME
        

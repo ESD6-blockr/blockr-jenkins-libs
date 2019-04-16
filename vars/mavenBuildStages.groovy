@@ -1,4 +1,6 @@
-def call(String version, Map sonarSettings = null) {
+#!/usr/bin/groovy
+
+def call(Map sonarSettings = null) {
     if (sonarSettings != null) {
         stage('Build with sonarube scan') {
             withSonarQubeEnv('main') {
