@@ -1,13 +1,12 @@
-def call(Map sonarSettings = null) {
+def call(String version, Map sonarSettings = null) {
     if (sonarSettings != null) {
         stage('Build with sonarube scan') {
-            withCredentials([usernamePassword(credentialsId: "sonar.${sonarSettings.key}", passwordVariable: 'token', usernameVariable: 'user')]) {
-                withSonarQubeEnv('main') {
+            withSonarQubeEnv('main') {
                     sh "mvn clean package sonar:sonar \
                         -Dsonar.projectKey=${sonarSettings.key} \
-                        -Dsonar.host.url=${sonarSettings.host} \
-                        -Dsonar.login=${token}"
-                }
+                        -Dsonar.projectVersion=${env.PROJECT_VERSION} \
+                        -Dsonar.host.url=${SONAR_HOST_URL} \
+                        -Dsonar.login=${SONAR_AUTH_TOKEN}"
             }
         }
 

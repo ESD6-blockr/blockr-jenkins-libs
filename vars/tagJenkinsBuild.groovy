@@ -21,7 +21,7 @@ def call(String type) {
                 String newVersion = "${env.PROJECT_VERSION}-${env.BUILD_NUMBER}"
                 packageFile.version = newVersion
                 writeJSON file: 'package.json', json: packageFile
-                break
+                break                
         }
     }
 }

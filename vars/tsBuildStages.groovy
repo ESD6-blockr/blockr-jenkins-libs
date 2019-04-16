@@ -1,6 +1,6 @@
 #!/usr/bin/groovy
 
-def call(Map sonarSettings = null) {
+def call(String version, Map sonarSettings = null) {
     stage('Initialize') {
         def branch = env.BRANCH_NAME
        
@@ -21,16 +21,15 @@ def call(Map sonarSettings = null) {
 
     if (sonarSettings != null) {
         stage('Sonarqube scan') {
-            withCredentials([usernamePassword(credentialsId: "sonar.${sonarSettings.key}", passwordVariable: 'token', usernameVariable: 'user')]) {
-                def scannerHome  = tool 'DefaultScanner'
-                
-                withSonarQubeEnv('main') {
-                    sh "${scannerHome}/bin/sonar-scanner \
-                    -Dsonar.projectKey=${sonarSettings.key} \
-                    -Dsonar.sources=${sonarSettings.source} \
-                    -Dsonar.host.url=${sonarSettings.host} \
-                    -Dsonar.login=${token}"
-                }
+            def scannerHome  = tool 'DefaultScanner'
+            
+            withSonarQubeEnv('main') {
+                sh "${scannerHome}/bin/sonar-scanner \
+                -Dsonar.projectKey=${sonarSettings.key} \
+                -Dsonar.sources=${sonarSettings.source} \
+                -Dsonar.projectVersion=${env.PROJECT_VERSION} \
+                -Dsonar.host.url=${SONAR_HOST_URL} \
+                -Dsonar.login=${SONAR_AUTH_TOKEN}"
             }
         }
 
@@ -40,7 +39,7 @@ def call(Map sonarSettings = null) {
               if (qg.status != 'OK') {
                   error "Pipeline aborted due to quality gate failure: ${qg.status}"
               }
-          }
+            }
         }
     }
 
