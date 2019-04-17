@@ -9,6 +9,8 @@ def call(Map sonarSettings = null) {
         tsBuildStages(sonarSettings)
 
         npmPublish()
+
+        tsArchive()
         
         cleanWorkSpace()
     }
