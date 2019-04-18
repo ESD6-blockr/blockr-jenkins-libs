@@ -10,7 +10,7 @@ def call(Map sonarSettings = null) {
 
         npmPublish()
 
-        tsArchive()
+        archive('dist/')
         
         cleanWorkSpace()
     }
