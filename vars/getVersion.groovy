@@ -1,7 +1,7 @@
 #!/usr/bin/groovy
 
 def call(String type) {
-    stage('Tag build') {
+    stage('Get version') {
         def branch = env.BRANCH_NAME
 
         if (branch.contains('/')) {

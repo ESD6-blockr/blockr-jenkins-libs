@@ -1,6 +1,6 @@
 #!/usr/bin/groovy
 
-def call(Map sonarSettings = null) {
+def call(Map settings) {
     stage('Initialize') {
         def branch = env.BRANCH_NAME
        
@@ -19,8 +19,8 @@ def call(Map sonarSettings = null) {
         sh 'npm run lint'
     }
 
-    if (sonarSettings != null) {
-       tsSonarScan(sonarSettings);
+    if (settings.sonar_key != null) {
+       tsSonarScan(settings.sonar_key, settings.source_folder);
 
        awaitSonarResults()
     }

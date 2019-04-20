@@ -1,8 +1,8 @@
 #!/usr/bin/groovy
 
-def call(Map sonarSettings = null) {
-    if (sonarSettings != null) {
-        mavenSonarScan(sonarSettings)
+def call(Map settings) {
+    if (settings.sonar_key != null) {
+        mavenSonarScan(settings.sonar_key)
 
         awaitSonarResults()
     } else {

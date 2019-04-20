@@ -1,12 +1,12 @@
 #!/usr/bin/groovy
 
-def call(Map sonarSettings = null) {
+def call(String repo, Map settings) {
     node('maven') {
         scmClone()
 
-        tagJenkinsBuild('maven')
+        getVersion('maven')
 
-        mavenBuildStages(sonarSettings)
+        mavenBuildStages(settings)
 
         cleanWorkSpace()
     }
