@@ -1,7 +1,9 @@
 #!/usr/bin/groovy
 
 def call(String operation, String environment) {
+  node() {
     def changelogContext
+    def commit = checkout scm
     def jira_url = 'https://jira.naebers.me'
  
     withCredentials([usernamePassword(credentialsId: 'jenkins-jira', passwordVariable: 'pass', usernameVariable: 'user')]) {
@@ -14,7 +16,7 @@ def call(String operation, String environment) {
                 password: pass 
             ], 
             returnType: 'CONTEXT', 
-            to: [type: 'COMMIT', value: co.GIT_COMMIT]
+            to: [type: 'COMMIT', value: commit.GIT_COMMIT]
         )
     }
 
@@ -23,4 +25,5 @@ def call(String operation, String environment) {
         jiraComment body: "${operation} to ${environment} in build ${currentBuild.displayName} of ${env.JOB_NAME}", issueKey: issue.issue
       }
     }
+  }
 }
