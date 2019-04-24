@@ -3,7 +3,7 @@
 def call(Map settings) {
     if (env.BRANCH_NAME == 'develop') {
         stage('Publish development package') {
-            echo 'Publishing to dev environemnt'
+            echo 'Publishing to dev environment'
             npmPublishStages('dev')
             archive(settings.archive_folders)
             logToJira("Published", "develop")
@@ -12,7 +12,7 @@ def call(Map settings) {
 
     if (env.BRANCH_NAME == 'release') {
         stage('Publish staging package') {
-            echo 'Publishing to staging environemnt'
+            echo 'Publishing to staging environment'
             npmPublishStages('staging')
             archive(settings.archive_folders)
             logToJira("Published", "staging")
@@ -21,8 +21,8 @@ def call(Map settings) {
 
     if (env.BRANCH_NAME == 'master') {
         stage('Publish production package') {
-            echo 'Publishing to production environemnt'
-            npmPublishStages('production')
+            echo 'Publishing to production environment'
+            npmPublishStages()
             archive(settings.archive_folders)
             logToJira("Published", "production")
         }
