@@ -9,7 +9,7 @@ def call(String operation, String environment) {
   
       withCredentials([usernamePassword(credentialsId: 'jenkins-jira', passwordVariable: 'pass', usernameVariable: 'user')]) {
           changelogContext = gitChangelog(
-              from: [type: 'REF', value: 'master'], 
+              from: [type: 'REF', value: env.BRANCH_NAME], 
               jira: [
                   issuePattern: '\\b[a-zA-Z]([a-zA-Z]+)-([0-9]+)\\b',
                   server: jira_url,
