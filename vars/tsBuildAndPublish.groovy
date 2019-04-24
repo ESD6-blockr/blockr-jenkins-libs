@@ -12,7 +12,7 @@ def call(String repo, Map settings) {
             npmPublish(settings)
         }
         catch(all) {
-            throw
+            currentBuild.result = 'FAILURE'
         }
         finally {
             cleanWorkSpace()

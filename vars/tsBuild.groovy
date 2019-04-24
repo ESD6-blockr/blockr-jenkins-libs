@@ -10,7 +10,7 @@ def call(String repo, Map settings) {
             tsBuildStages(settings)
         }
         catch(all) {
-            throw
+            currentBuild.result = 'FAILURE'
         }
         finally {
             cleanWorkSpace()
