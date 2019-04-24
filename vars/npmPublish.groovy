@@ -5,7 +5,8 @@ def call(Map settings) {
         parallel development: {
             if (env.BRANCH_NAME == 'develop') {
                 echo 'Publishing to dev environemnt'
-                npmPublishStages('dev', settings.archive_folders)
+                npmPublishStages('dev')
+                archive(settings.archive_folders)
                 logToJira("Published", "develop")
                 return;
             }
@@ -13,7 +14,8 @@ def call(Map settings) {
         staging: {
             if (env.BRANCH_NAME.contains('release')) {
                 echo 'Publishing to staging environemnt'
-                npmPublishStages('staging', settings.archive_folders)
+                npmPublishStages('staging')
+                archive(settings.archive_folders)
                 logToJira("Published", "staging")
                 return;
             }
@@ -21,7 +23,8 @@ def call(Map settings) {
         producion: {
             if (env.BRANCH_NAME == 'master') {
                 echo 'Publishing to production environemnt'
-                npmPublishStages(null, settings.archive_folders)
+                npmPublishStages()
+                archive(settings.archive_folders)
                 logToJira("Published", "production")
                 return;
             }

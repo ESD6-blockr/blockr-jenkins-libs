@@ -29,13 +29,4 @@ def call(String environment = null, ArrayList archive_folders = null) {
     stage('Publish to registry') {
         sh 'npm publish --access public'
     }
-    
-    echo "${archive_folders}"
-
-    if (archive_folders) {
-        for (folder in archive_folders) {
-            echo "${folder}"
-            archive(folder)
-        } 
-    }
 }
