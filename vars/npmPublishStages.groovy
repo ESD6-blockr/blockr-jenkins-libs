@@ -1,6 +1,6 @@
 #!/usr/bin/groovy
 
-def call(String environment = null) {
+def call(String environment = null, ArrayList archive_folders = null) {
     if (environment != null) {
         stage('Set publish registry') {
             String registry = "npm-${environment}.naebers.me"
@@ -29,6 +29,10 @@ def call(String environment = null) {
     stage('Publish to registry') {
         sh 'npm publish --access public'
     }
-
-    archive('dist/')
+    
+    if (archive_folders) {
+        for (folder in archive_folders) {
+            archive(folder)
+        } 
+    }
 }

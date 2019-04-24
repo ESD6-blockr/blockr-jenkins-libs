@@ -2,6 +2,6 @@
 
 def call(String folder) {
     stage('Archive') {
-        archiveArtifacts artifacts: folder
+        archiveArtifacts artifacts: "${folder}"
     }
 }
