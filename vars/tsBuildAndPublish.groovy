@@ -2,14 +2,20 @@
 
 def call(String repo, Map settings) {
     node('nodejs') {
-        scmClone()
+        try {
+            scmClone()
 
-        getVersion('npm')
+            getVersion('npm')
 
-        tsBuildStages(settings)
+            tsBuildStages(settings)
 
-        npmPublish(settings)
-        
-        cleanWorkSpace()
+            npmPublish(settings)
+        }
+        catch(all) {
+            throw
+        }
+        finally {
+            cleanWorkSpace()
+        }
     }
 }
