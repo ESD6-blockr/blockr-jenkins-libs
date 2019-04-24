@@ -8,7 +8,7 @@ def call(String repo, Map settings) {
 
         tsBuildStages(settings)
 
-        npmPublish()
+        npmPublish(settings)
         
         cleanWorkSpace()
     }

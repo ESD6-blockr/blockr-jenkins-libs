@@ -29,6 +29,4 @@ def call(String environment = null) {
     stage('Publish to registry') {
         sh 'npm publish --access public'
     }
-
-    archive('dist/')
 }
