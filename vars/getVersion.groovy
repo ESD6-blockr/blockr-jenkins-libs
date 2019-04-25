@@ -11,12 +11,12 @@ def call(String type) {
         switch (type) {
             case 'maven':
                 def pom = readMavenPom file: 'pom.xml'
-                currentBuild.displayName = "${pom.version}-${branch}-${env.BUILD_NUMBER}"
+                currentBuild.displayName = "${pom.version}-${env.BUILD_NUMBER}"
                 env.PROJECT_VERSION = pom.version
                 break
             case 'npm':
                 def packageFile = readJSON file: 'package.json'
-                currentBuild.displayName = "${packageFile.version}-${branch}-${env.BUILD_NUMBER}"
+                currentBuild.displayName = "${packageFile.version}-${env.BUILD_NUMBER}"
                 env.PROJECT_VERSION = packageFile.version
                 String newVersion = "${env.PROJECT_VERSION}-${env.BUILD_NUMBER}"
                 packageFile.version = newVersion
