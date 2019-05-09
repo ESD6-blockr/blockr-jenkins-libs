@@ -6,6 +6,7 @@ def call() {
     }
 
     stage('Record results') {
-         step([$class: 'CoberturaPublisher', coberturaReportFile: 'coverage/cobertura-coverage.xml'])
+        junit 'junit.xml'
+        step([$class: 'CoberturaPublisher', coberturaReportFile: 'coverage/cobertura-coverage.xml'])
     }
 }
