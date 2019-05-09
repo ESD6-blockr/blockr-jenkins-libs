@@ -23,7 +23,7 @@ def call(Map settings) {
         sh 'npm run build'
     }
 
-    if (settings.skip_tests != null) {
+    if (!settings.skip_tests) {
         tsTest()
     }
 
