@@ -19,13 +19,17 @@ def call(Map settings) {
         sh 'npm run lint'
     }
 
+    stage('Build') {
+        sh 'npm run build'
+    }
+
+    if (!settings.skip_tests) {
+        tsTest()
+    }
+
     if (settings.sonar_key != null) {
        tsSonarScan(settings.sonar_key, settings.source_folder);
 
        awaitSonarResults()
-    }
-
-    stage('Build') {
-        sh 'npm run build'
     }
 }
