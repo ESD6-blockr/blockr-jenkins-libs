@@ -6,10 +6,14 @@ def call(String environment = null, ArrayList archive_folders = null) {
             String registry = "npm-${environment}.naebers.me"
             
             withCredentials([usernamePassword(credentialsId: "npm-${environment}", passwordVariable: 'pass', usernameVariable: 'user')]) {
-                sh "echo '@blockr:registry=https://${registry}' >> .npmrc"
-                sh "echo '//${registry}/:username=${user}' >> .npmrc"
-                sh "echo '//${registry}/:_password=${pass}' >> .npmrc"
-                sh "echo '//${registry}/:email=danenaebers@gmail.com' >> .npmrc"
+                def content = """
+                @blockr:registry=https://${registry}
+                //${registry}/:username=${user}
+                //${registry}/:_password=${pass}
+                //${registry}/:email=danenaebers@gmail.com
+                """
+
+                writeFile(file: ".npmrc", text: content, encoding: "UTF-8")
             }
         }
 
@@ -22,7 +26,9 @@ def call(String environment = null, ArrayList archive_folders = null) {
 
     stage('Set publish registry') {
         withCredentials([usernamePassword(credentialsId: "npmjs", passwordVariable: 'token', usernameVariable: 'user')]) {
-            sh "echo '//registry.npmjs.org/:_authToken=${token}' >> .npmrc"
+            String content = "//registry.npmjs.org/:_authToken=${token}"
+            
+            writeFile(file: ".npmrc", text: content, encoding: "UTF-8")
         }
     }
 
