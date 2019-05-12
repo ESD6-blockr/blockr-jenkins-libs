@@ -5,12 +5,10 @@ def call(String environment = null, ArrayList archive_folders = null) {
         stage('Set publish registry') {
             String registry = "npm-${environment}.naebers.me"
             
-            withCredentials([usernamePassword(credentialsId: "npm-${environment}", passwordVariable: 'pass', usernameVariable: 'user')]) {
+            withCredentials([usernamePassword(credentialsId: "npm-${environment}", passwordVariable: 'token', usernameVariable: 'user')]) {
                 def content = """
-                @blockr:registry=https://${registry}
-                //${registry}/:username=${user}
-                //${registry}/:_password=${pass}
-                //${registry}/:email=danenaebers@gmail.com
+                registry=https://${registry}
+                //${registry}/:_authToken=${token}
                 """
 
                 writeFile(file: ".npmrc", text: content, encoding: "UTF-8")
