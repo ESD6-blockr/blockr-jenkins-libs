@@ -34,6 +34,7 @@ def call(String repo, Map settings) {
 
     stage('Test') {
         sh 'mkdir coverage'
+        sh 'docker run -v "$PWD/coverage":/opt/coverage ${testImageName}'
         sh "docker run --rm -v ${env.WORKSPACE}/coverage:/opt/coverage ${testImageName}"
     }
 
