@@ -32,7 +32,7 @@ def call(String repo, Map settings) {
         deployImageName = "${repo}:${version}"
         testImageName = "${repo}-test:${version}"
 
-        sh "docker build -t ${deployImageName} --build-arg 'VERSION='${version}' . "
+        sh "docker build -t ${deployImageName} --build-arg 'VERSION=${version}' . "
         sh "docker build --target TEST -t ${testImageName} --build-arg 'VERSION=${version}' . "
     }
 
