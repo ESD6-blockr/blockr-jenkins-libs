@@ -39,7 +39,7 @@ def call(String repo, Map settings) {
     }
 
     stage('Record results') {
-        step([$class: 'CoberturaPublisher', coberturaReportFile: "${env.WORKSPACE}/coverage/cobertura-coverage.xml"])
+        step([$class: 'CoberturaPublisher', coberturaReportFile: "**/coverage/cobertura-coverage.xml"])
     }
 
     if (settings.sonar_key != null) {
