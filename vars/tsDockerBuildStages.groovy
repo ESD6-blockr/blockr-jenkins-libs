@@ -33,7 +33,7 @@ def call(String repo, Map settings) {
     }
 
     stage('Test') {
-        sh 'docker run -v "$PWD/coverage":/opt/coverage ${testImageName}'
+        sh "docker run -v $PWD/coverage:/opt/coverage ${testImageName}"
     }
 
     stage('Record results') {
