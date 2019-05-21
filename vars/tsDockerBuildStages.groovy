@@ -20,6 +20,12 @@ def call(String repo, Map settings) {
                            
             writeFile(file: ".npmrc", text: content, encoding: "UTF-8")        
         }
+
+        if (branch == 'master') {
+            String content =  '@blockr:registry=https://registry.npmjs.org/'
+                           
+            writeFile(file: ".npmrc", text: content, encoding: "UTF-8")        
+        }
     }
 
     stage('Build') {
@@ -27,7 +33,7 @@ def call(String repo, Map settings) {
         testImageName = "${repo}-test:${version}"
 
         sh "docker build -t ${deployImageName} --build-arg 'VERSION='${version}' . "
-        sh "docker build --target test -t ${testImageName} --build-arg 'VERSION=${version}' . "
+        sh "docker build --target TEST -t ${testImageName} --build-arg 'VERSION=${version}' . "
     }
 
     stage('Test') {
