@@ -35,11 +35,11 @@ def call(String repo, Map settings) {
     stage('Test') {
         fileOperations([folderCreateOperation('coverage')])
 
-        sh "docker run --rm -v coverage:/opt/coverage ${testImageName}"
+        sh "docker run --rm -v ${env.WORKSPACE}/coverage:/opt/coverage ${testImageName}"
     }
 
     stage('Record results') {
-        step([$class: 'CoberturaPublisher', coberturaReportFile: 'coverage/cobertura-coverage.xml'])
+        step([$class: 'CoberturaPublisher', coberturaReportFile: "${env.WORKSPACE}/coverage/cobertura-coverage.xml"])
     }
 
     if (settings.sonar_key != null) {
