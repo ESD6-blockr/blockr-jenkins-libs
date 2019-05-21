@@ -8,6 +8,8 @@ def call(String repo, Map settings) {
 
     stage('Initialize') {
         def branch = env.BRANCH_NAME
+
+        sh 'docker version'
        
         if (branch == 'develop' || branch.contains('feature')) {
             String content =  '@blockr:registry=https://npm-dev.naebers.me'
@@ -32,7 +34,7 @@ def call(String repo, Map settings) {
         deployImageName = "${repo}:${version}"
         testImageName = "${repo}-test:${version}"
 
-        sh "docker build -t ${deployImageName} --build-arg 'VERSION=${version}' . "
+        sh "docker build -t ${deployImageName} --build-arg 'VERSION='${version}' . "
         sh "docker build --target TEST -t ${testImageName} --build-arg 'VERSION=${version}' . "
     }
 

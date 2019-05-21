@@ -13,7 +13,7 @@ def call(String repo, Map settings) {
             currentBuild.result = 'FAILURE'
         }
         finally {
-            cleanWorkSpace()
+            //cleanWorkSpace()
         }
     }
 }
