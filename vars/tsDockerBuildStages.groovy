@@ -11,19 +11,16 @@ def call(String repo, Map settings) {
 
         sh 'docker version'
 
-        def path = libraryResource 'node-registry/dev'
-        echo path
-       
         if (branch == 'develop' || branch.contains('feature')) {
-            sh "cp ${libraryResource 'node-registry/dev'} .npmrc"
+            sh "cp /home/jenkins/resources/node-registries/dev .npmrc"
         }
 
         if (branch.contains('release')) {
-            sh "cp ${libraryResource 'node-registry/staging'} .npmrc"
+            sh "cp /home/jenkins/resources/node-registries/staging .npmrc"
         }
 
         if (branch == 'master') {
-            sh "cp ${libraryResource 'node-registry/prod'} .npmrc"
+            sh "cp /home/jenkins/resources/node-registries/prod .npmrc"
         }
     }
 
