@@ -35,7 +35,7 @@ def call(String repo, Map settings) {
     stage('Test') {
         fileOperations([folderCreateOperation('coverage')])
 
-        sh "docker run --rm -v ${env.WORKSPACE}/coverage:/opt/coverage ${testImageName}"
+        sh "docker run --rm -v ./coverage:./coverage ${testImageName}"
     }
 
     stage('Record results') {
