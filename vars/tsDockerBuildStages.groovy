@@ -10,23 +10,20 @@ def call(String repo, Map settings) {
         def branch = env.BRANCH_NAME
 
         sh 'docker version'
+
+        def path = libraryResource 'node-registry/dev'
+        echo path
        
         if (branch == 'develop' || branch.contains('feature')) {
-            String content =  '@blockr:registry=https://npm-dev.naebers.me'
-                           
-            writeFile(file: ".npmrc", text: content, encoding: "UTF-8")
+            sh "cp ${libraryResource 'node-registry/dev'} .npmrc"
         }
 
         if (branch.contains('release')) {
-            String content =  '@blockr:registry=https://npm-staging.naebers.me'
-                           
-            writeFile(file: ".npmrc", text: content, encoding: "UTF-8")        
+            sh "cp ${libraryResource 'node-registry/staging'} .npmrc"
         }
 
         if (branch == 'master') {
-            String content =  '@blockr:registry=https://registry.npmjs.org/'
-                           
-            writeFile(file: ".npmrc", text: content, encoding: "UTF-8")        
+            sh "cp ${libraryResource 'node-registry/prod'} .npmrc"
         }
     }
 
