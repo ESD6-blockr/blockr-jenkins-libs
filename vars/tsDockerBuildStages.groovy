@@ -1,6 +1,11 @@
 #!/usr/bin/groovy
 
 def call(String repo, Map settings) {
+    def version = env.PROJECT_VERSION
+    def deployImageName
+    def testImageName
+
+
     stage('Initialize') {
         def branch = env.BRANCH_NAME
 
@@ -17,12 +22,12 @@ def call(String repo, Map settings) {
         if (branch == 'master') {
             writeFile(file: ".npmrc", text: '@blockr:registry=https://registry.npmjs.org', encoding: "UTF-8")        
         }
+
+        stash 'scm_files'
     }
 
-    docker.image('inogo/docker-compose:1.24.0') { c -> {
-        def version = env.PROJECT_VERSION
-        def deployImageName
-        def testImageName
+    node('docker') {
+        unstash 'scm_files'
 
         stage('Build') {
             deployImageName = "${repo}:${version}"
@@ -33,12 +38,9 @@ def call(String repo, Map settings) {
         }
 
         stage('Test') {
-            String pwd = pwd()
-            echo pwd
-            sh "docker run -v ${pwd}/coverage:/opt/coverage ${testImageName}"
+            sh "docker run -v ${env.WORKSPACE}/coverage:/opt/coverage ${testImageName}"
         }
-    }}
-    
+    }
 
     stage('Record results') {
         step([$class: 'CoberturaPublisher', coberturaReportFile: "coverage/cobertura-coverage.xml"])
