@@ -3,11 +3,15 @@
 def call(String repo, Map settings) {
     node('master') {
         try {
-            scmClone()
+            docker.image('inogo/docker-compose:1.24.0').inside {
+                sh 'docker ps'
+            }
 
-            getVersion('npm')
+        //     scmClone()
 
-            tsDockerBuildStages(repo, settings)
+        //     getVersion('npm')
+
+        //     tsDockerBuildStages(repo, settings)
         }
         catch(all) {
             currentBuild.result = 'FAILURE'
