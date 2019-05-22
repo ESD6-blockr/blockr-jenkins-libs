@@ -5,7 +5,7 @@ def call(String environment = null, ArrayList archive_folders = null) {
         stage('Set publish registry') {
             String registry = "npm-${environment}.naebers.me"
             
-            withCredentials([usernamePassword(credentialsId: "npm-${environment}", passwordVariable: 'token', usernameVariable: 'user')]) {
+            withCredentials([string(credentialsId: "npm-${environment}", variable: 'token')]) {
                 def content = """
                 registry=https://${registry}
                 //${registry}/:_authToken=${token}
@@ -23,7 +23,7 @@ def call(String environment = null, ArrayList archive_folders = null) {
     }
 
     stage('Set publish registry') {
-        withCredentials([usernamePassword(credentialsId: "npmjs", passwordVariable: 'token', usernameVariable: 'user')]) {
+        withCredentials([string(credentialsId: "npmjs", variable: 'token')]) {
             String content = "//registry.npmjs.org/:_authToken=${token}"
             
             writeFile(file: ".npmrc", text: content, encoding: "UTF-8")
