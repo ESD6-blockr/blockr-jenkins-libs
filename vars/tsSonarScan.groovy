@@ -1,6 +1,6 @@
 #!/usr/bin/groovy
 
-def call(String key, String source) {
+def call(String key, String source, Map exclusions) {
     stage('Sonarqube scan') {
         def scannerHome = tool 'DefaultScanner'
 
@@ -10,7 +10,8 @@ def call(String key, String source) {
                 -Dsonar.sources=${source} \
                 -Dsonar.projectVersion=${env.PROJECT_VERSION} \
                 -Dsonar.host.url=${SONAR_HOST_URL} \
-                -Dsonar.login=${SONAR_AUTH_TOKEN}"
+                -Dsonar.login=${SONAR_AUTH_TOKEN} \
+                -Dsonar.coverage.exclusions=${exclusions}"
         }
     }
 }
