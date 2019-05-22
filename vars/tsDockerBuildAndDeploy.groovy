@@ -1,7 +1,7 @@
 #!/usr/bin/groovy
 
 def call(String repo, Map settings) {
-    pipeline() {
+    pipeline {
         agent {
             docker {
                 image 'inogo/docker-compose:1.24.0'
