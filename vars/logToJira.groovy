@@ -7,7 +7,7 @@ def call(String operation, String environment) {
       def commit = checkout scm
       def jira_url = 'https://jira.naebers.me'
   
-      withCredentials([usernamePassword(credentialsId: 'jenkins-jira', passwordVariable: 'pass', usernameVariable: 'user')]) {
+      withCredentials([usernamePassword(credentialsId: 'jira.jenkins.login', passwordVariable: 'pass', usernameVariable: 'user')]) {
           changelogContext = gitChangelog(
               from: [type: 'REF', value: env.BRANCH_NAME], 
               jira: [

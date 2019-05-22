@@ -1,7 +1,13 @@
 #!/usr/bin/groovy
 
 def call(String repo, Map settings) {
-    node('nodejs') {
+    String nodeString = 'nodejs'
+
+    if (settings.node) {
+        nodeString = "${nodeString} && ${settings.node}"
+    }
+
+    node(nodeString) {
         try {
             scmClone()
 

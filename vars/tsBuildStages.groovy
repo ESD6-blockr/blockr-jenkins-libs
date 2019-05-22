@@ -35,7 +35,7 @@ def call(Map settings) {
     failFast: true
 
     if (settings.sonar_key != null) {
-       tsSonarScan(settings.sonar_key, settings.source_folder);
+       tsSonarScan(settings.sonar_key, settings.source_folder, settings.sonar_exclusions);
 
        awaitSonarResults()
     }
