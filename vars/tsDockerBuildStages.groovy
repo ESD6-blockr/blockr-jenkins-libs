@@ -33,7 +33,7 @@ def call(String repo, Map settings) {
     }
 
     stage('Test') {
-        String pwd = sh 'pwd' 
+        String pwd = pwd()
         echo pwd
         sh "docker run -v ${pwd}/coverage:/opt/coverage ${testImageName}"
     }
