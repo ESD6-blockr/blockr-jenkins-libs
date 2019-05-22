@@ -4,14 +4,12 @@ def call(String repo, Map settings) {
     node('master') {
         try {
             docker.image('blockr/jenkins-docker-slave:stable').withRun('-v /var/run/docker.sock:/var/run/docker.sock') {
-                sh 'docker ps'
+                scmClone()
+
+                getVersion('npm')
+
+                tsDockerBuildStages(repo, settings)
             }
-
-        //     scmClone()
-
-        //     getVersion('npm')
-
-        //     tsDockerBuildStages(repo, settings)
         }
         catch(all) {
             currentBuild.result = 'FAILURE'

@@ -22,18 +22,16 @@ def call(String repo, Map settings) {
         }
     }
 
-    docker.image('inogo/docker-compose:1.24.0').inside {
-        stage('Build') {
-            deployImageName = "${repo}:${version}"
-            testImageName = "${repo}-test:${version}"
+    stage('Build') {
+        deployImageName = "${repo}:${version}"
+        testImageName = "${repo}-test:${version}"
 
-            sh "docker build -t ${deployImageName} --build-arg 'VERSION=${version}' . "
-            sh "docker build --target TEST -t ${testImageName} --build-arg 'VERSION=${version}' . "
-        }
+        sh "docker build -t ${deployImageName} --build-arg 'VERSION=${version}' . "
+        sh "docker build --target TEST -t ${testImageName} --build-arg 'VERSION=${version}' . "
+    }
 
-        stage('Test') {
-            sh "docker run -v ${env.WORKSPACE}/coverage:/opt/coverage ${testImageName}"
-        }
+    stage('Test') {
+        sh "docker run -v ${env.WORKSPACE}/coverage:/opt/coverage ${testImageName}"
     }
 
     stage('Record results') {
