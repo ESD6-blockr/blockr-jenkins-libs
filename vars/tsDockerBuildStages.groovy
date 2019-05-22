@@ -1,11 +1,6 @@
 #!/usr/bin/groovy
 
 def call(String repo, Map settings) {
-    def version = env.PROJECT_VERSION
-    def deployImageName
-    def testImageName
-
-
     stage('Initialize') {
         def branch = env.BRANCH_NAME
 
@@ -24,19 +19,26 @@ def call(String repo, Map settings) {
         }
     }
 
-    stage('Build') {
-        deployImageName = "${repo}:${version}"
-        testImageName = "${repo}-test:${version}"
+    docker.image('inogo/docker-compose:1.24.0') { c -> {
+        def version = env.PROJECT_VERSION
+        def deployImageName
+        def testImageName
 
-        sh "docker build -t ${deployImageName} --build-arg 'VERSION=${version}' . "
-        sh "docker build --target TEST -t ${testImageName} --build-arg 'VERSION=${version}' . "
-    }
+        stage('Build') {
+            deployImageName = "${repo}:${version}"
+            testImageName = "${repo}-test:${version}"
 
-    stage('Test') {
-        String pwd = pwd()
-        echo pwd
-        sh "docker run -v ${pwd}/coverage:/opt/coverage ${testImageName}"
-    }
+            sh "docker build -t ${deployImageName} --build-arg 'VERSION=${version}' . "
+            sh "docker build --target TEST -t ${testImageName} --build-arg 'VERSION=${version}' . "
+        }
+
+        stage('Test') {
+            String pwd = pwd()
+            echo pwd
+            sh "docker run -v ${pwd}/coverage:/opt/coverage ${testImageName}"
+        }
+    }}
+    
 
     stage('Record results') {
         step([$class: 'CoberturaPublisher', coberturaReportFile: "coverage/cobertura-coverage.xml"])
