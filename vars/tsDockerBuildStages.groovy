@@ -12,15 +12,15 @@ def call(String repo, Map settings) {
         sh 'docker version'
 
         if (branch == 'develop' || branch.contains('feature')) {
-            sh "cp /home/jenkins/resources/node-registries/dev .npmrc"
+            writeFile(file: ".npmrc", text: '@blockr:registry=https://npm-staging.naebers.me', encoding: "UTF-8")        
         }
 
         if (branch.contains('release')) {
-            sh "cp /home/jenkins/resources/node-registries/staging .npmrc"
+            writeFile(file: ".npmrc", text: '@blockr:registry=https://npm-staging.naebers.me', encoding: "UTF-8")        
         }
 
         if (branch == 'master') {
-            sh "cp /home/jenkins/resources/node-registries/prod .npmrc"
+            writeFile(file: ".npmrc", text: '@blockr:registry=https://registry.npmjs.org', encoding: "UTF-8")        
         }
     }
 
