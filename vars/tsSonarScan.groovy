@@ -1,6 +1,6 @@
 #!/usr/bin/groovy
 
-def call(String key, String source, Map exclusions) {
+def call(String key, String source, String exclusions) {
     stage('Sonarqube scan') {
         def scannerHome = tool 'DefaultScanner'
 
