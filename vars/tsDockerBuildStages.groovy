@@ -12,7 +12,7 @@ def call(String repo, Map settings) {
         sh 'docker version'
 
         if (branch == 'develop' || branch.contains('feature')) {
-            writeFile(file: ".npmrc", text: '@blockr:registry=https://npm-staging.naebers.me', encoding: "UTF-8")        
+            writeFile(file: ".npmrc", text: '@blockr:registry=https://npm-dev.naebers.me', encoding: "UTF-8")        
         }
 
         if (branch.contains('release')) {
