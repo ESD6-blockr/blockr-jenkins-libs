@@ -3,7 +3,7 @@
 def call(String repo, Map settings) {
     node('master') {
         try {
-            docker.image('inogo/docker-compose:1.24.0').inside {
+            docker.image('blockr/jenkins-docker-slave:stable').inside {
                 sh 'docker ps'
             }
 
