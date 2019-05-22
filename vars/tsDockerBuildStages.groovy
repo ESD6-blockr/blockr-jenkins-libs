@@ -20,13 +20,9 @@ def call(String repo, Map settings) {
         if (branch == 'master') {
             writeFile(file: ".npmrc", text: '@blockr:registry=https://registry.npmjs.org', encoding: "UTF-8")        
         }
-
-        stash 'scm_files'
     }
 
-    node('docker') {
-        unstash 'scm_files'
-
+    docker.image('inogo/docker-compose:1.24.0').inside {
         stage('Build') {
             deployImageName = "${repo}:${version}"
             testImageName = "${repo}-test:${version}"
