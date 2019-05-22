@@ -9,8 +9,6 @@ def call(String repo, Map settings) {
     stage('Initialize') {
         def branch = env.BRANCH_NAME
 
-        sh 'docker version'
-
         if (branch == 'develop' || branch.contains('feature')) {
             writeFile(file: ".npmrc", text: '@blockr:registry=https://npm-dev.naebers.me', encoding: "UTF-8")        
         }
