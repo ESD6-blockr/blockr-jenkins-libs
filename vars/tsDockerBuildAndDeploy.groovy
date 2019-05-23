@@ -21,25 +21,25 @@ def call(String repo, Map settings) {
 
             stash 'npmrc'
         }
-    }
 
-    node('docker') {
-        try {
-            unstash 'npmrc'
+        node('docker') {
+            try {
+                unstash 'npmrc'
 
-            getVersion('npm')
+                getVersion('npm')
 
-            tsDockerBuildStages(repo, settings)
+                tsDockerBuildStages(repo, settings)
+            }
+            catch(all) {
+                currentBuild.result = 'FAILURE'
+            }
+            finally {
+                //cleanWorkSpace()
+            }
         }
-        catch(all) {
-            currentBuild.result = 'FAILURE'
-        }
-        finally {
-            //cleanWorkSpace()
-        }
-    }
 
-    node('master') {
-        tsDockerQualityStages(settings)
+        node('master') {
+            tsDockerQualityStages(settings)
+        }
     }
 }
