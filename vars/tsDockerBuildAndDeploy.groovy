@@ -2,10 +2,10 @@
 
 def call(String repo, Map settings) {
     node('master') {
+        scmClone()
+
         stage('Initialize') {
             def branch = env.BRANCH_NAME
-
-            sh 'docker version'
 
             if (branch == 'develop' || branch.contains('feature')) {
                 writeFile(file: ".npmrc", text: '@blockr:registry=https://npm-dev.naebers.me', encoding: "UTF-8")        
@@ -26,8 +26,6 @@ def call(String repo, Map settings) {
     node('docker') {
         try {
             unstash 'npmrc'
-
-            scmClone()
 
             getVersion('npm')
 
