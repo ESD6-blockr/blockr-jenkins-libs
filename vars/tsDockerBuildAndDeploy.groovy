@@ -29,6 +29,10 @@ def call(String repo, Map settings) {
                 getVersion('npm')
 
                 tsDockerBuildStages(repo, settings)
+
+                node('master') {
+                    tsDockerQualityStages(settings)
+                }
             }
             catch(all) {
                 currentBuild.result = 'FAILURE'
@@ -36,10 +40,6 @@ def call(String repo, Map settings) {
             finally {
                 //cleanWorkSpace()
             }
-        }
-
-        node('master') {
-            tsDockerQualityStages(settings)
         }
     }
 }
