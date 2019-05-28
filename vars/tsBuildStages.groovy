@@ -16,7 +16,11 @@ def call(Map settings) {
             writeFile(file: ".npmrc", text: content, encoding: "UTF-8")        
         }
 
-        sh 'npm i'
+        if (!settings.yarn) {
+            sh 'npm i'
+        } else {
+            sh 'yarn'
+        }
     }
 
     stage('Build') {
