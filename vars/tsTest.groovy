@@ -1,8 +1,12 @@
 #!/usr/bin/groovy
 
-def call() {
+def call(Map settings) {
     stage('Test') {
-        sh 'npm run test'
+        if (!settings.yarn) {
+            sh 'npm run test'
+        } else {
+            sh 'yarn test'
+        }
     }
 
     stage('Record results') {

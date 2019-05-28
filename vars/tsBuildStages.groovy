@@ -20,16 +20,24 @@ def call(Map settings) {
     }
 
     stage('Build') {
-        sh 'npm run build'
+        if (!settings.yarn) {
+            sh 'npm run build'
+        } else {
+            sh 'yarn build'
+        }
     }
 
     parallel lint: {
         stage('Lint') {
-            sh 'npm run lint'
+            if (!settings.yarn) {
+                sh 'npm run lint'
+            } else {
+                sh 'yarn lint'
+            }
         }
     }, unitTests: {
         if (!settings.skip_tests) {
-            tsTest()
+            tsTest(settings)
         }
     },
     failFast: true
