@@ -16,28 +16,16 @@ def call(Map settings) {
             writeFile(file: ".npmrc", text: content, encoding: "UTF-8")        
         }
 
-        if (!settings.yarn) {
-            sh 'npm i'
-        } else {
-            sh 'yarn'
-        }
+        !settings.yarn ? 'npm i' : 'yarn'
     }
 
     stage('Build') {
-        if (!settings.yarn) {
-            sh 'npm run build'
-        } else {
-            sh 'yarn build'
-        }
+        !settings.yarn ? 'npm i' : 'yarn build'
     }
 
     parallel lint: {
         stage('Lint') {
-            if (!settings.yarn) {
-                sh 'npm run lint'
-            } else {
-                sh 'yarn lint'
-            }
+            !settings.yarn ? 'npm run lint' : 'yarn lint'
         }
     }, unitTests: {
         if (!settings.skip_tests) {

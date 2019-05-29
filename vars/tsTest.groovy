@@ -2,11 +2,7 @@
 
 def call(Map settings) {
     stage('Test') {
-        if (!settings.yarn) {
-            sh 'npm run test'
-        } else {
-            sh 'yarn test'
-        }
+        !settings.yarn ? 'npm run test' : 'yarn test'
     }
 
     stage('Record results') {
