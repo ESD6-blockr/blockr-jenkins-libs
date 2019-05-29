@@ -1,6 +1,8 @@
 #!/usr/bin/groovy
 
 def call(Map settings) {
+    String operator = !settings.yarn ? 'npm run' : 'yarn'
+
     stage('Initialize') {
         def branch = env.BRANCH_NAME
        
@@ -16,20 +18,21 @@ def call(Map settings) {
             writeFile(file: ".npmrc", text: content, encoding: "UTF-8")        
         }
 
-        !settings.yarn ? 'npm i' : 'yarn'
+        String initializeCommand = !settings.yarn ? 'npm i' : 'yarn'
+        sh "${initializeCommand}"
     }
 
     stage('Build') {
-        !settings.yarn ? 'npm i' : 'yarn build'
+        "sh ${operator} build"
     }
 
     parallel lint: {
         stage('Lint') {
-            !settings.yarn ? 'npm run lint' : 'yarn lint'
+            "sh ${operator} lint"
         }
     }, unitTests: {
         if (!settings.skip_tests) {
-            tsTest(settings)
+            tsTest(operator, settings)
         }
     },
     failFast: true
