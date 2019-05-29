@@ -6,14 +6,14 @@ def call(Map settings) {
     stage('Initialize') {
         def branch = env.BRANCH_NAME
        
-        if (branch == 'develop' || branch.contains('feature')) {
-            String content =  '@blockr:registry=https://npm-dev.naebers.me'
+        if (branch == 'develop' || branch.contains('feature') || branch.contains('fix')) {
+            String content = '@blockr:registry=https://npm-dev.naebers.me'
                            
             writeFile(file: ".npmrc", text: content, encoding: "UTF-8")
         }
 
         if (branch.contains('release')) {
-            String content =  '@blockr:registry=https://npm-staging.naebers.me'
+            String content = '@blockr:registry=https://npm-staging.naebers.me'
                            
             writeFile(file: ".npmrc", text: content, encoding: "UTF-8")        
         }
