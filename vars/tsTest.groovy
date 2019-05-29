@@ -2,7 +2,7 @@
 
 def call(String operator, Map settings) {
     stage('Test') {
-        "sh ${operator} test"
+        sh "${operator} test"
     }
 
     stage('Record results') {

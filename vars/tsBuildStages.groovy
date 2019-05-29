@@ -23,12 +23,12 @@ def call(Map settings) {
     }
 
     stage('Build') {
-        "sh ${operator} build"
+        sh "${operator} build"
     }
 
     parallel lint: {
         stage('Lint') {
-            "sh ${operator} lint"
+            sh "${operator} lint"
         }
     }, unitTests: {
         if (!settings.skip_tests) {
