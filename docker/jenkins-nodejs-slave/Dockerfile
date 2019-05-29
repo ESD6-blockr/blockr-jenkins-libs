@@ -1,7 +1,8 @@
 FROM jenkins/slave:alpine as ALPINE
 USER root
-RUN apk add npm nodejs python alpine-sdk autoconf libpng-dev automake libtool nasm yarn
+RUN apk add npm nodejs python alpine-sdk autoconf libpng-dev automake libtool nasm
 RUN node -v && npm -v
+RUN npm install -g yarn
 USER jenkins
 
 FROM jenkins/slave:latest as DEBIAN
