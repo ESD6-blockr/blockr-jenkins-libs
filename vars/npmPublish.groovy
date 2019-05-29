@@ -1,6 +1,12 @@
 #!/usr/bin/groovy
 
 def call(Map settings) {
+    if (currentBuild.result == 'UNSTABLE') {
+        timeout(time: 7, unit: 'DAYS') {
+            result = input message: 'Publish package anyway?', submitter: null, parameters: [booleanParam(defaultValue: false, description: '', name: 'yes')]
+        }
+    }
+
     if (env.BRANCH_NAME == 'develop') {
         stage('Publish development package') {
             echo 'Publishing to dev environment'
