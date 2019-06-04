@@ -1,14 +1,11 @@
 #!/usr/bin/groovy
 
 def call(Map settings) {
-    if (currentBuild.result == 'UNSTABLE') {
-        timeout(time: 7, unit: 'DAYS') {
-            result = input message: 'Publish package anyway?', submitter: null, parameters: [booleanParam(defaultValue: false, description: '', name: 'yes')]
-        }
-    }
+    String message = 'Publish package anyway?'
 
     if (env.BRANCH_NAME == 'develop') {
         stage('Publish development package') {
+            checkBuildStatus(message)
             echo 'Publishing to dev environment'
             npmPublishStages('dev')
             archive(settings.archive_folders)
@@ -18,6 +15,7 @@ def call(Map settings) {
 
     if (env.BRANCH_NAME == 'release') {
         stage('Publish staging package') {
+            checkBuildStatus(message)
             echo 'Publishing to staging environment'
             npmPublishStages('staging')
             archive(settings.archive_folders)
@@ -27,6 +25,7 @@ def call(Map settings) {
 
     if (env.BRANCH_NAME == 'master') {
         stage('Publish production package') {
+            checkBuildStatus(message)
             echo 'Publishing to production environment'
             npmPublishStages()
             archive(settings.archive_folders)
