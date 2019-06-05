@@ -26,7 +26,7 @@ def call(String repo, Map settings) {
         sh "docker build -t ${publishImageName} -f ${dockerfile} --build-arg REGISTRY=${registry} . "
                 
         if (!settings.skip_tests) {
-            sh "docker build --target TEST -t ${testImageName} -f ${dockerfile} --build-arg REGISTRY=${registry} WORKDIR=${path} . "
+            sh "docker build --target TEST -t ${testImageName} -f ${dockerfile} --build-arg REGISTRY=${registry} --build-arg WORKDIR=${path} . "
         }
 
         env.IMAGE_NAME = publishImageName

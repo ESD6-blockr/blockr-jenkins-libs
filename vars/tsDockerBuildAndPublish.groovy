@@ -24,9 +24,10 @@ def call(String repo, Map settings) {
 
             tsDockerPublish(repo, settings.archive_folders)
         }
-        catch(all) {
+        catch(error) {
             echo 'an error occured'
             currentBuild.result = 'FAILURE'
+            throw error
         }
         finally {
             cleanWorkSpace()
