@@ -5,6 +5,8 @@ def call(String imageName, String repo, String environment = null, String versio
     def latestTag
 
     stage('Publish') {
+        checkBuildStatus("Publish docker image anyway?")
+        
         withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'pass', usernameVariable: 'usr')]) {
             sh "docker login -u ${usr} -p ${pass}"
 

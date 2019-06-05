@@ -49,11 +49,17 @@ def call(String repo, Map settings) {
 
     if (settings.sonar_key != null) {
         node('nodejs') {
-            unstash 'context'
+            try {
+                unstash 'context'
 
-            tsSonarScan(settings.sonar_key, settings.source_folder, settings.sonar_exclusions);
+                sh 'npm i'
 
-            awaitSonarResults()
+                tsSonarScan(settings.sonar_key, settings.source_folder, settings.sonar_exclusions);
+
+                awaitSonarResults()
+            } finally {
+                cleanWorkSpace()
+            }
         }
     }
 }
