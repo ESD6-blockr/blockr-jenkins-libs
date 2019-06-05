@@ -5,7 +5,7 @@ def call(String repo, ArrayList archive_folders = null) {
     def imageName = env.IMAGE_NAME
     def version = env.PROJECT_VERSION
 
-    if (branch == 'develop' || branch.contains('feature') || branch.contains('fix')) {
+    if (branch == 'develop') {
         tsDockerPublishStages(imageName, repo, 'develop', version, archive_folders)
     }
 
