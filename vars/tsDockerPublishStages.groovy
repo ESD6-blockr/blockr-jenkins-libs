@@ -28,5 +28,5 @@ def call(String imageName, String repo, String environment = null, String versio
     }
 
     archive(archive_folders)
-    logToJira("Docker Published", image)
+    logToJira("Docker Published", imageName)
 }
