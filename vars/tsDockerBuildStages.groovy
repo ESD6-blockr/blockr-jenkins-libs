@@ -46,8 +46,10 @@ def call(String repo, Map settings) {
     }
 
     if (settings.sonar_key != null) {
-       tsSonarScan(settings.sonar_key, settings.source_folder, settings.sonar_exclusions);
+        node('nodejs') {
+            tsSonarScan(settings.sonar_key, settings.source_folder, settings.sonar_exclusions);
 
-       awaitSonarResults()
+            awaitSonarResults()
+        }
     }
 }
