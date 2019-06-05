@@ -1,30 +1,26 @@
 #!/usr/bin/groovy
 
 def call(String repo, Map settings) {
-    node('master') {
-        scmClone()
-
-        stage('Initialize') {
-            def branch = env.BRANCH_NAME
-        
-            if (branch == 'develop' || branch.contains('feature') || branch.contains('fix')) {
-                sh 'cp /home/jenkins/resources/npmdev ./.npmrc'
-            }
-
-            if (branch.contains('release')) {
-                sh 'cp /home/jenkins/resources/npmstaging ./.npmrc'  
-            }
-
-            stash 'context'
-        }
-    }
     node('docker') {
         try {
-            unstash 'context'
+            scmClone()
 
             getVersion('npm')
 
             tsDockerBuildStages(repo, settings)
+
+            if (settings.sonar_key != null) {
+                node('nodejs') {
+                    unstash 'context'
+
+                    sh 'npm i typescript'
+
+                    tsSonarScan(settings.sonar_key, settings.source_folder, settings.sonar_exclusions);
+                    awaitSonarResults()
+
+                    cleanWorkSpace()
+                }
+            }
 
             tsDockerPublish(repo, settings.archive_folders)
         }

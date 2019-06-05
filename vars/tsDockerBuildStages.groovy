@@ -4,12 +4,26 @@ def call(String repo, Map settings) {
     def version = "${env.PROJECT_VERSION}.${env.BUILD_NUMBER}"
     def publishImageName = "${repo}:${version}"
     def testImageName = "${repo}.test:${version}"
+    
     String path = pwd()
+    Strin registry
+
+    stage('Initialize') {
+        def branch = env.BRANCH_NAME
+
+        if (branch == 'develop' || branch.contains('feature') || branch.contains('fix')) {
+            registry = '@blockr:registry=https://npm-dev.naebers.me'
+        }
+
+        if (branch.contains('release')) {
+            registry = '@blockr:registry=https://npm-staging.naebers.me'
+        }
+    }       
 
     stage('Build') {
         def dockerfile = 'Dockerfile'
 
-        sh "docker build -t ${publishImageName} -f ${dockerfile} . "
+        sh "docker build -t ${publishImageName} -f ${dockerfile} --build-arg REGISTRY=${registry} . "
                 
         if (!settings.skip_tests) {
             sh "docker build --target TEST -t ${testImageName} -f ${dockerfile} --build-arg WORKDIR=${path} . "
@@ -31,15 +45,4 @@ def call(String repo, Map settings) {
     }
 
     stash 'context'
-
-    if (settings.sonar_key != null) {
-        node('nodejs') {
-            unstash 'context'
-
-            sh 'npm i typescript'
-
-            tsSonarScan(settings.sonar_key, settings.source_folder, settings.sonar_exclusions);
-            awaitSonarResults()
-        }
-    }
 }
