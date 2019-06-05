@@ -24,10 +24,10 @@ def call(String repo, Map settings) {
     stage('Build') {
         def dockerfile = 'Dockerfile'
 
-        sh "docker build -t ${publishImageName} -f ${dockerfile} --build-arg 'VERSION=${version}' . "
+        sh "docker build -t ${publishImageName} -f ${dockerfile} . "
                 
         if (!settings.skip_tests) {
-            sh "docker build --target TEST -t ${testImageName} -f ${dockerfile} --build-arg 'VERSION=${version}' . "
+            sh "docker build --target TEST -t ${testImageName} -f ${dockerfile} --build-arg 'WORKDIR=${env.WORKSPACE}' . "
         }
 
         env.IMAGE_NAME = publishImageName
@@ -35,7 +35,7 @@ def call(String repo, Map settings) {
 
     if (!settings.skip_tests) {
         stage('Unit Test') {
-            sh "docker run --rm -e JEST_JUNIT_OUTPUT_DIR=/coverage -v /home/jenkins/reportFiles/coverage:/coverage ${testImageName}"
+            sh "docker run --rm -e JEST_JUNIT_OUTPUT_DIR=/coverage -v /home/jenkins/reportFiles/coverage:${env.WORKSPACE}/coverage ${testImageName}"
             sh 'cp -r /home/jenkins/reportFiles/coverage ./coverage'
             
             junit 'coverage/junit.xml'
