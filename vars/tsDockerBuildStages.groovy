@@ -45,8 +45,12 @@ def call(String repo, Map settings) {
         }
     }
 
+    stash includes: '**', name: 'context'
+
     if (settings.sonar_key != null) {
         node('nodejs') {
+            unstash 'context'
+            
             tsSonarScan(settings.sonar_key, settings.source_folder, settings.sonar_exclusions);
 
             awaitSonarResults()
