@@ -6,18 +6,6 @@ def call(String repo, Map settings) {
     def testImageName = "${repo}.test:${version}"
     String path = pwd()
 
-    stage('Initialize') {
-        def branch = env.BRANCH_NAME
-       
-        if (branch == 'develop' || branch.contains('feature') || branch.contains('fix')) {
-            sh 'cp /home/jenkins/resources/npmdev ./.npmrc'
-        }
-
-        if (branch.contains('release')) {
-            sh 'cp /home/jenkins/resources/npmstaging ./.npmrc'  
-        }
-    }
-
     stage('Build') {
         def dockerfile = 'Dockerfile'
 

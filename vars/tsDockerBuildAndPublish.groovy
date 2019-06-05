@@ -1,9 +1,26 @@
 #!/usr/bin/groovy
 
 def call(String repo, Map settings) {
+    node('master') {
+        smcClone()
+
+        stage('Initialize') {
+            def branch = env.BRANCH_NAME
+        
+            if (branch == 'develop' || branch.contains('feature') || branch.contains('fix')) {
+                sh 'cp /home/jenkins/resources/npmdev ./.npmrc'
+            }
+
+            if (branch.contains('release')) {
+                sh 'cp /home/jenkins/resources/npmstaging ./.npmrc'  
+            }
+
+            stash 'context'
+        }
+    }
     node('docker') {
         try {
-            scmClone()
+            unstash 'context'
 
             getVersion('npm')
 
@@ -12,7 +29,7 @@ def call(String repo, Map settings) {
             tsDockerPublish(repo, settings.archive_folders)
         }
         catch(all) {
-            echo 'here'
+            echo 'an error occured'
             currentBuild.result = 'FAILURE'
         }
         finally {
