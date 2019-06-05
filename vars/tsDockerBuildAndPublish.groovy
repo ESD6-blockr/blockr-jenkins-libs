@@ -2,7 +2,7 @@
 
 def call(String repo, Map settings) {
     node('master') {
-        smcClone()
+        scmClone()
 
         stage('Initialize') {
             def branch = env.BRANCH_NAME
