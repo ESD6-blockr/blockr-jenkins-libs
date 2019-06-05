@@ -1,13 +1,10 @@
 #!/usr/bin/groovy
 
 def call(String repo, Map settings) {
-    def version
-    def publishImageName
-    def testImageName
-
-    version = "${env.PROJECT_VERSION}.${env.BUILD_NUMBER}"
-    publishImageName = "${repo}:${version}"
-    testImageName = "${repo}.test:${version}"
+    def version = "${env.PROJECT_VERSION}.${env.BUILD_NUMBER}"
+    def publishImageName = "${repo}:${version}"
+    def testImageName = "${repo}.test:${version}"
+    String path = env.WORKSPACE
 
     stage('Initialize') {
         def branch = env.BRANCH_NAME
@@ -27,7 +24,7 @@ def call(String repo, Map settings) {
         sh "docker build -t ${publishImageName} -f ${dockerfile} . "
                 
         if (!settings.skip_tests) {
-            sh "docker build --target TEST -t ${testImageName} -f ${dockerfile} --build-arg 'WORKDIR=${env.WORKSPACE}' . "
+            sh "docker build --target TEST -t ${testImageName} -f ${dockerfile} --build-arg 'WORKDIR=${path}' . "
         }
 
         env.IMAGE_NAME = publishImageName
@@ -35,7 +32,7 @@ def call(String repo, Map settings) {
 
     if (!settings.skip_tests) {
         stage('Unit Test') {
-            sh "docker run --rm -e JEST_JUNIT_OUTPUT_DIR=/coverage -v /home/jenkins/reportFiles/coverage:${env.WORKSPACE}/coverage ${testImageName}"
+            sh "docker run --rm -e JEST_JUNIT_OUTPUT_DIR=/coverage -v /home/jenkins/reportFiles/coverage:${path}/coverage ${testImageName}"
             sh 'cp -r /home/jenkins/reportFiles/coverage ./coverage'
             
             junit 'coverage/junit.xml'
