@@ -12,6 +12,7 @@ def call(String repo, Map settings) {
             tsDockerPublish(repo, settings.archive_folders)
         }
         catch(all) {
+            echo 'here'
             currentBuild.result = 'FAILURE'
         }
         finally {

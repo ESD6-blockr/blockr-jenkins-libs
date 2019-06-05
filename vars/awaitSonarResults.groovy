@@ -5,7 +5,7 @@ def call() {
         timeout(time: 10, unit: 'MINUTES') {
             def qg = waitForQualityGate()
             if (qg.status != 'OK') {
-                echo "The Build will be marked unstable due to quality gate failure: ${qg.status}"
+                echo "The Build will be marked unstable due to quality gate failure: ${qg}"
                 currentBuild.result = 'UNSTABLE'
             }
         }
