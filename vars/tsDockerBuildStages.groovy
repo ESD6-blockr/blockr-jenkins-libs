@@ -4,7 +4,8 @@ def call(String repo, Map settings) {
     def version = "${env.PROJECT_VERSION}.${env.BUILD_NUMBER}"
     def publishImageName = "${repo}:${version}"
     def testImageName = "${repo}.test:${version}"
-    String path = env.WORKSPACE
+    String path = pwd()
+    echo path
 
     stage('Initialize') {
         def branch = env.BRANCH_NAME
