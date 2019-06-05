@@ -56,7 +56,8 @@ def call(String repo, Map settings) {
                 cleanWorkSpace()
             }
         }
-
-        awaitSonarResults()
+        node('docker') {
+            awaitSonarResults()
+        }
     }
 }
