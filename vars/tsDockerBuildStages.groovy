@@ -6,7 +6,7 @@ def call(String repo, Map settings) {
     def testImageName = "${repo}.test:${version}"
     
     String path = pwd()
-    Strin registry
+    String registry
 
     stage('Initialize') {
         def branch = env.BRANCH_NAME
