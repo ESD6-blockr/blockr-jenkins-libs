@@ -5,7 +5,6 @@ def call(String repo, Map settings) {
     def publishImageName = "${repo}:${version}"
     def testImageName = "${repo}.test:${version}"
     String path = pwd()
-    echo path
 
     stage('Initialize') {
         def branch = env.BRANCH_NAME
@@ -25,7 +24,7 @@ def call(String repo, Map settings) {
         sh "docker build -t ${publishImageName} -f ${dockerfile} . "
                 
         if (!settings.skip_tests) {
-            sh "docker build --target TEST -t ${testImageName} -f ${dockerfile} --build-arg 'WORKDIR=${path}' . "
+            sh "docker build --target TEST -t ${testImageName} -f ${dockerfile} --build-arg WORKDIR=${path} . "
         }
 
         env.IMAGE_NAME = publishImageName
