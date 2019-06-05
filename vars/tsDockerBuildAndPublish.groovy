@@ -9,7 +9,7 @@ def call(String repo, Map settings) {
 
             tsDockerBuildStages(repo, settings)
 
-            dockerPublish(repo, settings.archive_folders)
+            tsdockerPublish(repo, settings.archive_folders)
         }
         catch(all) {
             currentBuild.result = 'FAILURE'
