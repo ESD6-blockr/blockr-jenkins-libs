@@ -35,7 +35,7 @@ def call(String repo, Map settings) {
 
     if (!settings.skip_tests) {
         stage('Unit Test') {
-            sh "docker run --rm -e 'JEST_JUNIT_OUTPUT_DIR=/coverage' -v /home/jenkins/reportFiles/coverage:/opt/coverage ${imageName}"
+            sh "docker run --rm -e JEST_JUNIT_OUTPUT_DIR=/opt/coverage -v /home/jenkins/reportFiles/coverage:/opt/coverage ${testImageName}"
             sh 'cp -r /home/jenkins/reportFiles/coverage ./coverage'
             
             junit 'coverage/junit.xml'
