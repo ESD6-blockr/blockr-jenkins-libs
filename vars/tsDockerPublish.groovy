@@ -13,5 +13,7 @@ def call(String repo, ArrayList archive_folders = null) {
         tsDockerPublishStages(imageName, repo, 'staging', version, archive_folders)
     }
 
-    tsDockerPublishStages(imageName, repo, null, version, archive_folders)
+    if (branch == 'master') {
+        tsDockerPublishStages(imageName, repo, null, version, archive_folders)
+    }
 }
