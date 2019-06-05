@@ -52,11 +52,11 @@ def call(String repo, Map settings) {
                 sh 'npm i'
 
                 tsSonarScan(settings.sonar_key, settings.source_folder, settings.sonar_exclusions);
-
-                awaitSonarResults()
             } finally {
                 cleanWorkSpace()
             }
         }
+
+        awaitSonarResults()
     }
 }
