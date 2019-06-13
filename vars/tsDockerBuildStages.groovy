@@ -11,7 +11,7 @@ def call(String repo, Map settings) {
     stage('Initialize') {
         def branch = env.BRANCH_NAME
 
-        if (branch == 'develop' || branch.contains('feature') || branch.contains('fix')) {
+        if (branch == 'develop' || branch.contains('feature') || branch.contains('fix') || branch.contains('PR')) {
             registry = '@blockr:registry=https://npm-dev.naebers.me'
         }
 
